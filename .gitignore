@@ -1,0 +1,34 @@
+# C++ build artifacts
+publisher/build/
+publisher/Debug/
+publisher/Release/
+publisher/*.exe
+publisher/*.pdb
+
+# CMake intermediate files and VS
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.vcxproj*
+*.sln
+*.user
+*.filters
+*.suo
+
+# Third-party libs (we fetch at build time)
+publisher/third_party/
+
+# Node dependencies & environment
+dashboard/node_modules/
+dashboard/.env
+dashboard/package-lock.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+
+# OS and editor cruft
+.DS_Store
+Thumbs.db
+.vscode/

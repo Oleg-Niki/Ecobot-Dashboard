@@ -1,0 +1,10 @@
+^C:\USERS\NIKIT\LEARN-CPP\ECOBOT-DASHBOARD\TRASH-SORTING-DASHBOARD\PUBLISHER\BUILD\CMAKEFILES\19101888AA3BC55D8F7A67E01EE00B98\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/nikit/Learn-Cpp/Ecobot-Dashboard/trash-sorting-dashboard/publisher -BC:/Users/nikit/Learn-Cpp/Ecobot-Dashboard/trash-sorting-dashboard/publisher/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/nikit/Learn-Cpp/Ecobot-Dashboard/trash-sorting-dashboard/publisher/build/TrashSortingPublisher.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

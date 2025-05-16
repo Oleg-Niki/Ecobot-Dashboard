@@ -1,0 +1,4 @@
+{
+    "api_url": "http://localhost:4000/api/events",
+    "publish_interval_ms": 500
+}

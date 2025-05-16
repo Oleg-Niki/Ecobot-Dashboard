@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sorting Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        
+        canvas {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Trash Sorting Metrics</h1>
+    <canvas id="barChart" width="600" height="300"></canvas>
+    <canvas id="lineChart" width="600" height="300"></canvas>
+
+    <script>
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+
+        const barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Items Sorted',
+                    data: []
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        const lineChart = new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Latency (ms)',
+                    data: []
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        async function fetchData() {
+            const resp = await fetch('/api/data');
+            const events = await resp.json();
+
+            // Bar chart: total count per category
+            const counts = {};
+            events.forEach(e => {
+                counts[e.category] = (counts[e.category] || 0) + e.count;
+            });
+            barChart.data.labels = Object.keys(counts);
+            barChart.data.datasets[0].data = Object.values(counts);
+            barChart.update();
+
+            // Line chart: latency over time
+            lineChart.data.labels = events.map(e => new Date(e.timestamp).toLocaleTimeString());
+            lineChart.data.datasets[0].data = events.map(e => e.latency_ms);
+            lineChart.update();
+        }
+
+        // Poll every second
+        setInterval(fetchData, 1000);
+        // Initial load
+        fetchData();
+    </script>
+</body>
+
+</html>
