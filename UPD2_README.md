@@ -1,3 +1,4 @@
+# Ecobot-Dashboard  
 **Real-Time Sorting Dashboard for Your Trash-Sorting Robot**
 
 A live-metrics pipeline streaming sorting events from a C++ publisher into a web dashboard for real-time visualization with bar and line charts.
@@ -39,18 +40,21 @@ A live-metrics pipeline streaming sorting events from a C++ publisher into a web
                                          │ • Polls /api/data │
                                          └─────────────────┘
 ```
+
+---
+
 ## Prerequisites
-C++ Publisher
 
-C++17-compatible compiler (g++, clang, or MSVC)
+- **C++ Publisher**  
+  - C++17-compatible compiler (g++, clang, or MSVC)  
+  - CMake ≥ 3.10  
+- **Web Dashboard**  
+  - Node.js ≥ 14.x and npm  
 
-CMake ≥ 3.10
-
-Web Dashboard
-
-Node.js ≥ 14.x and npm
+---
 
 ## Repository Layout
+
 ```text
 Ecobot-Dashboard/
 ├── .gitignore
@@ -68,22 +72,29 @@ Ecobot-Dashboard/
         └── index.html
 ```
 
+---
+
 ## Getting Started
-Clone & Prepare
+
+### Clone & Prepare
+
 ```bash
 git clone https://github.com/Oleg-Niki/Ecobot-Dashboard.git
 cd Ecobot-Dashboard
 ```
 
-Build & Configure C++ Publisher
+---
+
+### Build & Configure C++ Publisher
+
 ```bash
 cd publisher
 
 # (Optional) Fetch nlohmann/json and cpp-httplib headers into third_party/
 # Example:
-# curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp \\
+# curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp \
 #      -o third_party/json/include/nlohmann/json.hpp
-# curl -L https://raw.githubusercontent.com/yhirose/cpp-httplib/master/httplib.h \\
+# curl -L https://raw.githubusercontent.com/yhirose/cpp-httplib/master/httplib.h \
 #      -o third_party/httplib/include/httplib/httplib.h
 
 mkdir build && cd build
@@ -91,83 +102,103 @@ cmake ..
 cmake --build . --config Debug    # use `make` on Unix
 ```
 
-Result:
+**Result:**  
+- Windows: `publisher/build/Debug/publisher.exe`  
+- Unix:    `publisher/build/publisher`
 
-Windows: publisher/build/Debug/publisher.exe
+Edit `publisher/config.json` if needed:
 
-Unix: publisher/build/publisher
-
-Edit publisher/config.json if needed:
-``` json
-{
-  "api_url": "http://localhost:4000/api/events",
-  "publish_interval_ms": 500
-}
-```
-Configure & Run Dashboard
-```bash
-cd ../../dashboard
-npm install
-cp .env.example .env   # on Windows: copy .env.example .env
-```
-
-Edit .env if you need to change:
-```
-PORT=4000
-API_ROUTE=/api/events
-```
-
-Start the server:
-```bash
-npm start
-```
-
-You should see:
-```
-Dashboard listening at http://localhost:4000
-```
-
-## Usage
-
-1. Start the Dashboard
-```bash
-cd dashboard
-npm start
-```
-
-2. Run the Publisher
-```bash
-cd ../publisher/build/Debug   # or build/ on Unix
-publisher.exe                 # or ./publisher
-```
-
-3. View Live Metrics
-Open your browser at:
-```bash
-http://localhost:4000
-```
-## Configuration Files
-- publisher/config.json
 ```json
 {
   "api_url": "http://localhost:4000/api/events",
   "publish_interval_ms": 500
 }
 ```
-- dashboard/.env.example
+
+---
+
+### Configure & Run Dashboard
+
+```bash
+cd ../../dashboard
+npm install
+cp .env.example .env   # on Windows: copy .env.example .env
 ```
+
+Edit `.env` if you need to change:
+
+```ini
 PORT=4000
 API_ROUTE=/api/events
 ```
 
+Start the server:
+
+```bash
+npm start
+```
+
+You should see:
+
+```
+Dashboard listening at http://localhost:4000
+```
+
+---
+
+## Usage
+
+1. **Start the Dashboard**  
+   ```bash
+   cd dashboard
+   npm start
+   ```
+2. **Run the Publisher**  
+   ```bash
+   cd ../publisher/build/Debug   # or build/ on Unix
+   publisher.exe                 # or ./publisher
+   ```
+3. **View Live Metrics**  
+   Open your browser at:  
+   ```
+   http://localhost:4000
+   ```
+
+---
+
+## Configuration Files
+
+- **publisher/config.json**  
+  ```json
+  {
+    "api_url": "http://localhost:4000/api/events",
+    "publish_interval_ms": 500
+  }
+  ```
+- **dashboard/.env.example**  
+  ```ini
+  PORT=4000
+  API_ROUTE=/api/events
+  ```
+
+---
+
 ## Troubleshooting
-- Publisher can’t find config.json
-Ensure you run the executable from the publisher/ folder or copy config.json into your build output directory.
-- HTTP errors
-Verify api_url in config.json matches PORT and API_ROUTE in .env.
-- CMake errors
-Confirm CMake ≥ 3.10 and a C++17 compiler are installed.
-- Dashboard won’t start
-Rerun npm install, check Node.js version with node -v, and confirm you renamed .env.example to .env.
 
+- **Publisher can’t find `config.json`**  
+  Ensure you run the executable from the `publisher/` folder or copy `config.json` into your build output directory.
 
+- **HTTP errors**  
+  Verify `api_url` in `config.json` matches `PORT` and `API_ROUTE` in `.env`.
+
+- **CMake errors**  
+  Confirm CMake ≥ 3.10 and a C++17 compiler are installed.
+
+- **Dashboard won’t start**  
+  Rerun `npm install`, check Node.js version with `node -v`, and confirm you renamed `.env.example` to `.env`.
+
+---
+
+## License
+
+This project is released under the **MIT License**. See [LICENSE](LICENSE) for details.
