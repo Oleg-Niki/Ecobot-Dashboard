@@ -5,7 +5,7 @@ publisher/Release/
 publisher/*.exe
 publisher/*.pdb
 
-# CMake intermediate files and VS
+# CMake & VS
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
@@ -16,10 +16,10 @@ Makefile
 *.filters
 *.suo
 
-# Third-party libs (we fetch at build time)
+# Third-party
 publisher/third_party/
 
-# Node dependencies & environment
+# Node deps & env
 dashboard/node_modules/
 dashboard/.env
 dashboard/package-lock.json
@@ -28,7 +28,7 @@ dashboard/package-lock.json
 npm-debug.log*
 yarn-debug.log*
 
-# OS and editor cruft
+# OS & editor
 .DS_Store
 Thumbs.db
 .vscode/
