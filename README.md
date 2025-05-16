@@ -202,3 +202,29 @@ Dashboard listening at http://localhost:4000
 ## License
 
 This project is released under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+## Simple and short version README:
+1. C++ Publisher
+- Your robot (or a simulator) generates “sort events” (e.g. “I just sorted a plastic bottle, it took 42 ms”).
+
+- The C++ program gathers those events, turns each one into a small JSON message, and sends it over HTTP to your dashboard server at regular intervals.
+
+2. Node.js/Express Server
+
+- Listens for incoming POSTs at /api/events.
+
+- Every time it gets one of those JSON messages, it tucks it into an in-memory list.
+
+- Also exposes a GET endpoint (/api/data) that returns the full list of events as JSON.
+
+3. Browser Front-End
+
+- You open your browser to the dashboard’s URL (e.g. http://localhost:4000).
+
+- The page loads Chart.js and some JavaScript that every second calls /api/data.
+
+- It takes the returned JSON array of events and updates two charts:
+
+- A bar chart showing how many items of each category have been sorted so far.
+
+- A line chart showing the sort latency (time) for each event in the order they arrived.
