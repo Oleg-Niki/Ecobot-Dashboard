@@ -12,13 +12,27 @@
         }
         
         canvas {
+            display: block;
             margin-bottom: 40px;
+        }
+        
+        #testBtn {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
         }
     </style>
 </head>
 
 <body>
     <h1>Trash Sorting Metrics</h1>
+
+    <!-- Test-event button -->
+    <button id="testBtn">Generate Test Event</button>
+
+    <button id="runPubBtn">Run C++ Publisher</button>
+
+
     <canvas id="barChart" width="600" height="300"></canvas>
     <canvas id="lineChart" width="600" height="300"></canvas>
 
@@ -73,10 +87,83 @@
             lineChart.update();
         }
 
-        // Poll every second
-        setInterval(fetchData, 1000);
-        // Initial load
+        // Generate a random test event and POST it
+        async function generateTestEvent() {
+            const testEvent = {
+                category: `test-${Math.floor(Math.random()*5)}`, // e.g. "test-3"
+                timestamp: new Date().toISOString(),
+                latency_ms: Math.floor(Math.random() * 200),
+                count: 1
+            };
+
+            const res = await fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(testEvent)
+            });
+
+            if (!res.ok) {
+                console.error('Test event POST failed:', res.status);
+            } else {
+                console.log('Test event sent:', testEvent);
+                // Immediately refresh charts to show the new event
+                fetchData();
+            }
+        }
+
+        // Wire up the button
+        document.getElementById('testBtn')
+            .addEventListener('click', generateTestEvent);
+
+        // Initial load + poll every second
         fetchData();
+        setInterval(fetchData, 1000);
+
+        async function runPublisher() {
+            const res = await fetch('/api/run-publisher', {
+                method: 'POST'
+            });
+            const body = await res.json();
+            if (!res.ok) {
+                console.error('Failed to launch publisher:', body);
+            } else {
+                console.log('C++ publisher started');
+                // Give it a moment, then refresh data
+                setTimeout(fetchData, 500);
+            }
+        }
+
+        document.getElementById('runPubBtn')
+            .addEventListener('click', runPublisher);
+        // ────────────────────────────────────────────────────────────
+
+        // Your existing wiring for testBtn…
+        document.getElementById('testBtn')
+            .addEventListener('click', generateTestEvent);
+
+        // Initial load + poll every second
+        fetchData();
+        setInterval(fetchData, 1000);
+
+        let categories = [];
+        fetch('/categories.json')
+            .then(r => r.json())
+            .then(list => {
+                categories = list;
+                barChart.data.labels = categories;
+                barChart.data.datasets[0].data = categories.map(_ => 0);
+                barChart.update();
+            });
+
+        // In fetchData():
+        const counts = {};
+        events.forEach(e => {
+            counts[e.category] = (counts[e.category] || 0) + e.count;
+        });
+        barChart.data.datasets[0].data = categories.map(cat => counts[cat] || 0);
+        barChart.update();
     </script>
 </body>
 

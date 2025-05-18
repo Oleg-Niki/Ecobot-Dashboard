@@ -1,4 +1,4 @@
-# Ecobot-Dashboard  
+# Ecobot-Dashboard   (shoet description at the bottom)
 **Real-Time Sorting Dashboard for Your Trash-Sorting Robot**
 
 A live-metrics pipeline streaming sorting events from a C++ publisher into a web dashboard for real-time visualization with bar and line charts.
